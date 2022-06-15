@@ -22,7 +22,27 @@ class Tarefa(TarefaEntrada):
     id: UUID
 
 
-TAREFAS = []
+TAREFAS = [
+    {
+        "id": "1",
+        "titulo": "fazer compras",
+        "descrição": "comprar leite e ovos",
+        "estado": "não finalizado",
+    },
+    {
+        "id": "2",
+        "titulo": "levar o cachorro para tosar",
+        "descrição": "está muito peludo",
+        "estado": "não finalizado",
+    },
+    {
+        "id": "3",
+        "titulo": "lavar roupas",
+        "descrição": "estão sujas",
+        "estado": "não finalizado",
+    },
+]
+
 
 
 @app.get("/tarefas")
@@ -38,3 +58,12 @@ def criar(tarefa: TarefaEntrada):
     nova_tarefa.update({"id": uuid4()})
     TAREFAS.append(nova_tarefa)
     return nova_tarefa
+
+@app.get(
+    "/tarefas", response_model=Tarefa, status_code=status.HTTP_200_OK
+)
+def deletar(tarefa: TarefaEntrada):
+    tarefa_existente = tarefa.dict()
+    tarefa_existente.delete({"id": uuid4()})
+    TAREFAS.append(tarefa_existente)
+    return tarefa_existente
